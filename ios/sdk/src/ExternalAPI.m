@@ -15,13 +15,13 @@
  */
 
 #import <React/RCTBridgeModule.h>
-
+#import <React/RCTEventEmitter.h>
 #import "JitsiMeetView+Private.h"
+#import "ExternalAPI.h"
 
-@interface ExternalAPI : NSObject<RCTBridgeModule>
-@end
-
-@implementation ExternalAPI
+@implementation ExternalAPI{
+}
+static ExternalAPI *externalApi;
 
 RCT_EXPORT_MODULE();
 
@@ -31,7 +31,33 @@ RCT_EXPORT_MODULE();
 - (dispatch_queue_t)methodQueue {
     return dispatch_get_main_queue();
 }
+- (NSArray<NSString *> *)supportedEvents
+{
+    return @[@"toggle-audio",@"toggle-video",@"end-call"];
+}
 
+- (void)toggleAudio:(BOOL)mute
+{
+    [self sendEventWithName:@"toggle-audio" body:@{@"mute": @(mute)}];
+}
+- (void)toggleVideo:(BOOL)mute
+{
+    [self sendEventWithName:@"toggle-video" body:@{@"mute": @(mute)}];
+}
+- (void)endCall
+{
+    [self sendEventWithName:@"end-call" body:@{}];
+}
+- (instancetype)init {
+    self = [super init];
+    if (self) {
+        externalApi = self;
+    }
+    return self;
+}
++ (instancetype)getExternalApi {
+    return externalApi;
+}
 /**
  * Dispatches an event that occurred on JavaScript to the view's delegate.
  *

@@ -22,10 +22,8 @@
 @import Intents;  // Needed for NSUserActivity suggestedInvocationPhrase
 
 @import JitsiMeet;
-
 #import "Types.h"
 #import "ViewController.h"
-
 
 @implementation ViewController
 
@@ -36,6 +34,9 @@
     view.delegate = self;
 
     [view join:[[JitsiMeet sharedInstance] getInitialConferenceOptions]];
+  dispatch_time_t delay = dispatch_time(DISPATCH_TIME_NOW, NSEC_PER_SEC * 30);
+  dispatch_after(delay, dispatch_get_main_queue(), ^(void){
+  });
 }
 
 // JitsiMeetViewDelegate

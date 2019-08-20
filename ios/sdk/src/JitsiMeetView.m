@@ -22,7 +22,7 @@
 #import "JitsiMeetView+Private.h"
 #import "ReactUtils.h"
 #import "RNRootView.h"
-
+#import "ExternalAPI.h"
 
 /**
  * Backwards compatibility: turn the boolean prop into a feature flag.
@@ -114,7 +114,18 @@ static void initializeViewsMap() {
 - (void)leave {
     [self setProps:@{}];
 }
-
+- (void)toggleAudio:(BOOL)mute {
+    ExternalAPI *externalApi = [ExternalAPI getExternalApi];
+    [externalApi toggleAudio:mute];
+}
+- (void)toggleVideo:(BOOL)mute {
+    ExternalAPI *externalApi = [ExternalAPI getExternalApi];
+    [externalApi toggleVideo:mute];
+}
+- (void)end_call{
+    ExternalAPI *externalApi = [ExternalAPI getExternalApi];
+    [externalApi endCall];
+}
 #pragma mark Private methods
 
 /**

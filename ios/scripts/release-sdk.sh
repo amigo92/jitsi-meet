@@ -12,15 +12,15 @@ DO_GIT_TAG=${GIT_TAG:-0}
 
 echo "Releasing Jitsi Meet SDK ${SDK_VERSION}"
 
-pushd ${RELEASE_REPO}
+#pushd ${RELEASE_REPO}
 
 # Generate podspec file
-cat JitsiMeetSDK.podspec.tpl | sed -e s/VERSION/${SDK_VERSION}/g > JitsiMeetSDK.podspec
+#cat JitsiMeetSDK.podspec.tpl | sed -e s/VERSION/${SDK_VERSION}/g > JitsiMeetSDK.podspec
 
 # Cleanup
 rm -rf Frameworks/*
 
-popd
+#popd
 
 # Build the SDK
 pushd ${PROJECT_REPO}
@@ -31,7 +31,7 @@ if [[ $DO_GIT_TAG == 1 ]]; then
 fi
 popd
 
-pushd ${RELEASE_REPO}
+#pushd ${RELEASE_REPO}
 
 # Put the new files in the repo
 cp -r ${PROJECT_REPO}/ios/sdk/JitsiMeet.framework Frameworks/
@@ -42,11 +42,11 @@ xcrun bitcode_strip -r Frameworks/JitsiMeet.framework/JitsiMeet -o Frameworks/Ji
 xcrun bitcode_strip -r Frameworks/WebRTC.framework/WebRTC -o Frameworks/WebRTC.framework/WebRTC
 
 # Add all files to git
-if [[ $DO_GIT_TAG == 1 ]]; then
-    git add -A .
-    git commit -m "${SDK_VERSION}"
-    git tag ${SDK_VERSION}
-fi
+#if [[ $DO_GIT_TAG == 1 ]]; then
+#    git add -A .
+#    git commit -m "${SDK_VERSION}"
+#    git tag ${SDK_VERSION}
+#fi
 
 popd
 

@@ -36,5 +36,7 @@
  * Leaves the currently active conference.
  */
 - (void)leave;
-
+- (void)toggleAudio:(BOOL)mute;
+- (void)toggleVideo:(BOOL)mute;
+- (void)end_call;
 @end

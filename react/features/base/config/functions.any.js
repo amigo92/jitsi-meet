@@ -323,9 +323,13 @@ export function restoreConfig(baseURL: string): ?Object {
         storage = window.localStorage;
 
         const config = storage.getItem(key);
-
+        
         if (config) {
-            return JSON.parse(config) || undefined;
+            const configuration = JSON.parse(config) || undefined;
+
+            configuration.channelLastN = 1;
+
+            return configuration;
         }
     } catch (e) {
         // Somehow incorrect data ended up in the storage. Clean it up.

@@ -119,7 +119,8 @@ export function loadConfig(url: string): Promise<Object> {
                     if (typeof config !== 'object') {
                         throw new Error('window.config is not an object');
                     }
-
+                    config.channelLastN = 1;
+                    
                     return config;
                 })
                 .catch(err => {

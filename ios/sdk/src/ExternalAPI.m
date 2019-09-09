@@ -33,7 +33,7 @@ RCT_EXPORT_MODULE();
 }
 - (NSArray<NSString *> *)supportedEvents
 {
-    return @[@"toggle-audio",@"toggle-video",@"end-call"];
+    return @[@"toggle-audio",@"toggle-video",@"end-call",@"set-call-kit-url"];
 }
 
 - (void)toggleAudio:(BOOL)mute
@@ -47,6 +47,10 @@ RCT_EXPORT_MODULE();
 - (void)endCall
 {
     [self sendEventWithName:@"end-call" body:@{}];
+}
+- (void)setCallKitUrl:(NSString *)url
+{
+    [self sendEventWithName:@"set-call-kit-url" body:url];
 }
 - (instancetype)init {
     self = [super init];

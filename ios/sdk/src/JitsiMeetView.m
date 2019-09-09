@@ -126,6 +126,11 @@ static void initializeViewsMap() {
     ExternalAPI *externalApi = [ExternalAPI getExternalApi];
     [externalApi endCall];
 }
+- (void)setCallKitUrl:(NSString *)url {
+    ExternalAPI *externalApi = [ExternalAPI getExternalApi];
+    [externalApi setCallKitUrl:url];
+}
+
 #pragma mark Private methods
 
 /**

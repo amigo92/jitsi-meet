@@ -5,7 +5,8 @@ import { ReducerRegistry, set } from '../../base/redux';
 import {
     REMOVE_EXTERNAL_API_LISTENER,
     SET_EXTERNAL_API_LISTENER,
-    ADD_CALLKIT_URL
+    ADD_CALLKIT_URL,
+    ADD_CALLKIT_NAME
 } from './actionTypes';
 
 ReducerRegistry.register(
@@ -26,6 +27,12 @@ ReducerRegistry.register(
             return {
                 ...state,
                 callKitUrl: action.payload
+            };
+        }
+        case ADD_CALLKIT_NAME: {
+            return {
+                ...state,
+                callKitName: action.payload
             };
         }
         }

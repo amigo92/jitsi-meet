@@ -18,7 +18,9 @@ import { setAudioMuted, setVideoMuted } from '../../base/media';
 import { MiddlewareRegistry } from '../../base/redux';
 import {
     SET_EXTERNAL_API_LISTENER,
-    ADD_CALLKIT_URL
+    ADD_CALLKIT_URL,
+    ADD_CALLKIT_NAME,
+    REMOVE_EXTERNAL_API_LISTENER
 } from './actionTypes';
 import { externalApiEventEmitter } from './etherfunctions';
 import { appNavigate } from '../../app';
@@ -27,7 +29,9 @@ import CallKit from '../call-integration/CallKit';
 MiddlewareRegistry.register(store => next => action => {
     const result = next(action);
     const { type } = action;
-    const { subscriptions, callKitUrl } = store.getState()['features/mobile/external-api'];
+    const { subscriptions, callKitUrl, callKitName } = store.getState()[
+        'features/mobile/external-api'
+    ];
     const state = store.getState();
     const conference = getCurrentConference(state);
 
@@ -41,15 +45,22 @@ MiddlewareRegistry.register(store => next => action => {
             subscriptions.video.remove();
             subscriptions.endCall.remove();
             subscriptions.callKitUrl.remove();
-            store.dispatch({ type: SET_EXTERNAL_API_LISTENER });
+            subscriptions.meetingName.remove();
+            store.dispatch({ type: REMOVE_EXTERNAL_API_LISTENER });
         }
         break;
     case CONFERENCE_WILL_JOIN:
     case CONFERENCE_JOINED:
     case SET_ROOM:
-        if (conference && conference.callUUID) {
-            CallKit.updateCall(conference.callUUID, {
-                handle: callKitUrl || 'https://meet.etherlabs.io'
+        if (
+            conference
+                && conference.callUUID
+                && action.type === CONFERENCE_JOINED
+        ) {
+            CallKit.updateCall(action.conference.callUUID, {
+                handle: callKitUrl || 'https://meet.etherlabs.io',
+                displayName: callKitName || 'EtherMeet Meeting',
+                hasVideo: true
             });
         }
         if (!subscriptions) {
@@ -83,8 +94,19 @@ MiddlewareRegistry.register(store => next => action => {
                 callKitUrl: externalApiEventEmitter().addListener(
                         'set-call-kit-url',
                         url => {
-                            store.dispatch({ type: ADD_CALLKIT_URL,
-                                payload: url });
+                            store.dispatch({
+                                type: ADD_CALLKIT_URL,
+                                payload: url
+                            });
+                        }
+                ),
+                meetingName: externalApiEventEmitter().addListener(
+                        'set-call-kit-name',
+                        name => {
+                            store.dispatch({
+                                type: ADD_CALLKIT_NAME,
+                                payload: name
+                            });
                         }
                 )
             };

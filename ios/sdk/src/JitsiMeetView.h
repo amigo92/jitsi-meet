@@ -40,4 +40,5 @@
 - (void)toggleVideo:(BOOL)mute;
 - (void)end_call;
 - (void)setCallKitUrl:(NSString *_Nullable)url;
+- (void)setCallKitName:(NSString *_Nullable)name;
 @end

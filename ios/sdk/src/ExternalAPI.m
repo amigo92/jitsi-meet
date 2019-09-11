@@ -33,7 +33,7 @@ RCT_EXPORT_MODULE();
 }
 - (NSArray<NSString *> *)supportedEvents
 {
-    return @[@"toggle-audio",@"toggle-video",@"end-call",@"set-call-kit-url"];
+    return @[@"toggle-audio",@"toggle-video",@"end-call",@"set-call-kit-url", @"set-call-kit-name"];
 }
 
 - (void)toggleAudio:(BOOL)mute
@@ -51,6 +51,10 @@ RCT_EXPORT_MODULE();
 - (void)setCallKitUrl:(NSString *)url
 {
     [self sendEventWithName:@"set-call-kit-url" body:url];
+}
+- (void)setCallKitName:(NSString *)name
+{
+    [self sendEventWithName:@"set-call-kit-name" body:name];
 }
 - (instancetype)init {
     self = [super init];
@@ -71,25 +75,25 @@ RCT_EXPORT_MODULE();
  * @param scope
  */
 RCT_EXPORT_METHOD(sendEvent:(NSString *)name
-                       data:(NSDictionary *)data
-                      scope:(NSString *)scope) {
+                  data:(NSDictionary *)data
+                  scope:(NSString *)scope) {
     // The JavaScript App needs to provide uniquely identifying information to
     // the native ExternalAPI module so that the latter may match the former
     // to the native JitsiMeetView which hosts it.
     JitsiMeetView *view = [JitsiMeetView viewForExternalAPIScope:scope];
-
+    
     if (!view) {
         return;
     }
-
+    
     id delegate = view.delegate;
-
+    
     if (!delegate) {
         return;
     }
-
+    
     SEL sel = NSSelectorFromString([self methodNameFromEventName:name]);
-
+    
     if (sel && [delegate respondsToSelector:sel]) {
         [delegate performSelector:sel withObject:data];
     }
@@ -103,18 +107,19 @@ RCT_EXPORT_METHOD(sendEvent:(NSString *)name
  * @return A method name constructed from the specified `eventName`.
  */
 - (NSString *)methodNameFromEventName:(NSString *)eventName {
-   NSMutableString *methodName
-       = [NSMutableString stringWithCapacity:eventName.length];
-
-   for (NSString *c in [eventName componentsSeparatedByString:@"_"]) {
-       if (c.length) {
-           [methodName appendString:
-               methodName.length ? c.capitalizedString : c.lowercaseString];
-       }
-   }
-   [methodName appendString:@":"];
-
-   return methodName;
+    NSMutableString *methodName
+    = [NSMutableString stringWithCapacity:eventName.length];
+    
+    for (NSString *c in [eventName componentsSeparatedByString:@"_"]) {
+        if (c.length) {
+            [methodName appendString:
+             methodName.length ? c.capitalizedString : c.lowercaseString];
+        }
+    }
+    [methodName appendString:@":"];
+    
+    return methodName;
 }
 
 @end
+

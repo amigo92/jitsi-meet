@@ -17,4 +17,5 @@
 - (void)endCall;
 - (void)setCallKitUrl:(NSString *)url;
 - (void)setCallKitName:(NSString *)name;
+- (void)setCallKitProvider;
 @end

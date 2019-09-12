@@ -134,7 +134,10 @@ static void initializeViewsMap() {
     ExternalAPI *externalApi = [ExternalAPI getExternalApi];
     [externalApi setCallKitName:name];
 }
-
+- (void)setCallKitProvider{
+    ExternalAPI *externalApi = [ExternalAPI getExternalApi];
+    [externalApi setCallKitProvider];
+}
 #pragma mark Private methods
 
 /**

@@ -26,11 +26,12 @@
 #import "ViewController.h"
 
 @implementation ViewController
+static JitsiMeetView *jitsiView;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-
     JitsiMeetView *view = (JitsiMeetView *) self.view;
+    jitsiView = view;
     view.delegate = self;
 
     [view join:[[JitsiMeet sharedInstance] getInitialConferenceOptions]];
@@ -86,7 +87,6 @@
       [userActivity becomeCurrent];
     }
 #endif
-
 }
 
 - (void)conferenceTerminated:(NSDictionary *)data {
@@ -95,7 +95,10 @@
 
 - (void)conferenceWillJoin:(NSDictionary *)data {
     [self _onJitsiMeetViewDelegateEvent:@"CONFERENCE_WILL_JOIN" withData:data];
-}
+  dispatch_async(dispatch_get_main_queue(), ^{
+    [jitsiView setCallKitName:@"asd"];
+    [jitsiView setCallKitUrl:@"asd"];
+  });}
 
 #if 0
 - (void)enterPictureInPicture:(NSDictionary *)data {

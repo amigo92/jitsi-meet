@@ -20,7 +20,8 @@ import {
     SET_EXTERNAL_API_LISTENER,
     ADD_CALLKIT_URL,
     ADD_CALLKIT_NAME,
-    REMOVE_EXTERNAL_API_LISTENER
+    REMOVE_EXTERNAL_API_LISTENER,
+    ADD_CALLKIT_UUID
 } from './actionTypes';
 import { externalApiEventEmitter } from './etherfunctions';
 import { appNavigate } from '../../app';
@@ -29,7 +30,7 @@ import CallKit from '../call-integration/CallKit';
 MiddlewareRegistry.register(store => next => action => {
     const result = next(action);
     const { type } = action;
-    const { subscriptions, callKitUrl, callKitName } = store.getState()[
+    const { subscriptions, callKitUrl, callKitName, callUUID } = store.getState()[
         'features/mobile/external-api'
     ];
     const state = store.getState();
@@ -46,6 +47,7 @@ MiddlewareRegistry.register(store => next => action => {
             subscriptions.endCall.remove();
             subscriptions.callKitUrl.remove();
             subscriptions.meetingName.remove();
+            subscriptions.callKitProvider.remove();
             store.dispatch({ type: REMOVE_EXTERNAL_API_LISTENER });
         }
         break;
@@ -61,6 +63,10 @@ MiddlewareRegistry.register(store => next => action => {
                 handle: callKitUrl || 'https://meet.etherlabs.io',
                 displayName: callKitName || 'EtherMeet Meeting',
                 hasVideo: true
+            });
+            store.dispatch({
+                type: ADD_CALLKIT_UUID,
+                payload: action.conference.callUUID
             });
         }
         if (!subscriptions) {
@@ -96,7 +102,7 @@ MiddlewareRegistry.register(store => next => action => {
                         url => {
                             store.dispatch({
                                 type: ADD_CALLKIT_URL,
-                                payload: url
+                                payload: url.url
                             });
                         }
                 ),
@@ -105,10 +111,17 @@ MiddlewareRegistry.register(store => next => action => {
                         name => {
                             store.dispatch({
                                 type: ADD_CALLKIT_NAME,
-                                payload: name
+                                payload: name.name
                             });
                         }
-                )
+                ),
+                callKitProvider: externalApiEventEmitter().addListener('set-call-kit-provider', () => {
+                    CallKit.updateCall(callUUID, {
+                        handle: callKitUrl || 'https://meet.etherlabs.io',
+                        displayName: callKitName || 'EtherMeet Meeting',
+                        hasVideo: true
+                    });
+                })
             };
 
             store.dispatch({

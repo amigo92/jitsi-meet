@@ -25,15 +25,19 @@ static ExternalAPI *externalApi;
 
 RCT_EXPORT_MODULE();
 
+
 /**
  * Make sure all methods in this module are invoked on the main/UI thread.
  */
++ (BOOL)requiresMainQueueSetup {
+    return YES;
+}
 - (dispatch_queue_t)methodQueue {
     return dispatch_get_main_queue();
 }
 - (NSArray<NSString *> *)supportedEvents
 {
-    return @[@"toggle-audio",@"toggle-video",@"end-call",@"set-call-kit-url", @"set-call-kit-name"];
+    return @[@"toggle-audio",@"toggle-video",@"end-call",@"set-call-kit-url", @"set-call-kit-name", @"set-call-kit-provider"] ;
 }
 
 - (void)toggleAudio:(BOOL)mute
@@ -50,12 +54,17 @@ RCT_EXPORT_MODULE();
 }
 - (void)setCallKitUrl:(NSString *)url
 {
-    [self sendEventWithName:@"set-call-kit-url" body:url];
+    [self sendEventWithName:@"set-call-kit-url" body:@{@"url": url}];
 }
 - (void)setCallKitName:(NSString *)name
 {
-    [self sendEventWithName:@"set-call-kit-name" body:name];
+    [self sendEventWithName:@"set-call-kit-name" body:@{@"name": name}];
 }
+- (void)setCallKitProvider
+{
+    [self sendEventWithName:@"set-call-kit-provider" body:@{}];
+}
+
 - (instancetype)init {
     self = [super init];
     if (self) {

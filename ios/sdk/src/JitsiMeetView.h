@@ -41,4 +41,5 @@
 - (void)end_call;
 - (void)setCallKitUrl:(NSString *_Nullable)url;
 - (void)setCallKitName:(NSString *_Nullable)name;
+- (void)setCallKitProvider;
 @end

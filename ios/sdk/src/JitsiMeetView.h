@@ -39,7 +39,7 @@
 - (void)toggleAudio:(BOOL)mute;
 - (void)toggleVideo:(BOOL)mute;
 - (void)end_call;
-- (void)setCallKitUrl:(NSString *_Nullable)url;
-- (void)setCallKitName:(NSString *_Nullable)name;
-- (void)setCallKitProvider;
++ (void)setCallKitUrl:(NSString *_Nullable)url;
++ (void)setCallKitName:(NSString *_Nullable)name;
++ (void)setCallKitProvider;
 @end

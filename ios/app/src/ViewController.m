@@ -31,7 +31,7 @@ static JitsiMeetView *jitsiView;
 - (void)viewDidLoad {
     [super viewDidLoad];
     JitsiMeetView *view = (JitsiMeetView *) self.view;
-    jitsiView = view;
+//    jitsiView = view;
     view.delegate = self;
 
     [view join:[[JitsiMeet sharedInstance] getInitialConferenceOptions]];
@@ -95,15 +95,31 @@ static JitsiMeetView *jitsiView;
 
 - (void)conferenceWillJoin:(NSDictionary *)data {
     [self _onJitsiMeetViewDelegateEvent:@"CONFERENCE_WILL_JOIN" withData:data];
-  dispatch_async(dispatch_get_main_queue(), ^{
-    [jitsiView setCallKitName:@"asd"];
-    [jitsiView setCallKitUrl:@"asd"];
-  });}
+//  dispatch_async(dispatch_get_main_queue(), ^{
+    [JitsiMeetView setCallKitName:@"asd"];
+    [JitsiMeetView setCallKitUrl:@"asd"];
+    [JitsiMeetView setCallKitProvider];
+}
+//  });}
 
 #if 0
 - (void)enterPictureInPicture:(NSDictionary *)data {
     [self _onJitsiMeetViewDelegateEvent:@"ENTER_PICTURE_IN_PICTURE" withData:data];
 }
 #endif
-
+- (void)audioMuted:(NSDictionary *)data {
+  NSLog(@"%@", data);
+}
+- (void)videoMuted:(NSDictionary *)data {
+  NSLog(@"%@", data);
+}
+- (void)participantLeft:(NSDictionary *)data{
+  NSLog(@"%@", data);
+}
+- (void)participantJoined:(NSDictionary *)data{
+  NSLog(@"%@", data);
+}
+- (void)participantUpdated:(NSDictionary *)data{
+  NSLog(@"participant is updated %@", data);
+}
 @end

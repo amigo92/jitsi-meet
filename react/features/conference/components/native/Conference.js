@@ -207,7 +207,7 @@ class Conference extends AbstractConference<Props, *> {
                 <View
                     pointerEvents = 'box-none'
                     style = { styles.toolboxAndFilmstripContainer }>
-                    {/* <Filmstrip />*/}
+                    <Filmstrip />
                 </View>
 
                 <SafeAreaView

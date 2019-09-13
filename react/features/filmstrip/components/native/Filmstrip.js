@@ -103,24 +103,25 @@ class Filmstrip extends Component<Props> {
 
         return (
             <Container
-                style = { filmstripStyle }
-                visible = { this.props._visible }>
-                {
-                    this._separateLocalThumbnail
-                        && !isNarrowAspectRatio_
-                        && <LocalThumbnail />
-                }
+                style={[
+                    styles.filmstripNarrow,
+                    { alignSelf: "center", bottom: 70 }
+                ]}
+                visible={this.props._visible}
+            >
+                {this._separateLocalThumbnail && !isNarrowAspectRatio_ && (
+                    <LocalThumbnail />
+                )}
                 <ScrollView
-                    horizontal = { isNarrowAspectRatio_ }
-                    showsHorizontalScrollIndicator = { false }
-                    showsVerticalScrollIndicator = { false }
-                    style = { styles.scrollView } >
-                    {
-                        !this._separateLocalThumbnail
-                            && !isNarrowAspectRatio_
-                            && <LocalThumbnail />
-                    }
-                    {
+                    horizontal={isNarrowAspectRatio_}
+                    showsHorizontalScrollIndicator={false}
+                    showsVerticalScrollIndicator={false}
+                    style={styles.scrollView}
+                >
+                    {!this._separateLocalThumbnail && !isNarrowAspectRatio_ && (
+                        <LocalThumbnail />
+                    )}
+                    {/*
 
                         this._sort(
                                 this.props._participants,
@@ -130,18 +131,14 @@ class Filmstrip extends Component<Props> {
                                     key = { p.id }
                                     participant = { p } />))
 
-                    }
-                    {
-                        !this._separateLocalThumbnail
-                            && isNarrowAspectRatio_
-                            && <LocalThumbnail />
-                    }
+                            */}
+                    {!this._separateLocalThumbnail && isNarrowAspectRatio_ && (
+                        <LocalThumbnail />
+                    )}
                 </ScrollView>
-                {
-                    this._separateLocalThumbnail
-                        && isNarrowAspectRatio_
-                        && <LocalThumbnail />
-                }
+                {this._separateLocalThumbnail && isNarrowAspectRatio_ && (
+                    <LocalThumbnail />
+                )}
             </Container>
         );
     }

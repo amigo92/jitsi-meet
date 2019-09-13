@@ -126,15 +126,15 @@ static void initializeViewsMap() {
     ExternalAPI *externalApi = [ExternalAPI getExternalApi];
     [externalApi endCall];
 }
-- (void)setCallKitUrl:(NSString *)url {
++ (void)setCallKitUrl:(NSString *)url {
     ExternalAPI *externalApi = [ExternalAPI getExternalApi];
     [externalApi setCallKitUrl:url];
 }
-- (void)setCallKitName:(NSString *)name {
++ (void)setCallKitName:(NSString *)name {
     ExternalAPI *externalApi = [ExternalAPI getExternalApi];
     [externalApi setCallKitName:name];
 }
-- (void)setCallKitProvider{
++ (void)setCallKitProvider{
     ExternalAPI *externalApi = [ExternalAPI getExternalApi];
     [externalApi setCallKitProvider];
 }

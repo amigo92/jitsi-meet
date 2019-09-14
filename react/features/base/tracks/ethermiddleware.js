@@ -28,7 +28,7 @@ MiddlewareRegistry.register(store => next => action => {
         const muted = jitsiTrack.isMuted();
         const participantID = jitsiTrack.getParticipantId();
         const isVideoTrack = jitsiTrack.isVideoTrack();
-        const id = jitsiTrack.isLocal() ? "local" : participantID;
+        const id = participantID;
         
         if (isVideoTrack) {
             sendEvent(store, 'VIDEO_MUTED', {

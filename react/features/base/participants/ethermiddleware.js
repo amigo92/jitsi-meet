@@ -1,7 +1,11 @@
 // @flow
 
 import { MiddlewareRegistry } from '../redux';
-import { PARTICIPANT_JOINED, PARTICIPANT_LEFT, PARTICIPANT_UPDATED } from './actionTypes';
+import {
+    PARTICIPANT_JOINED,
+    PARTICIPANT_LEFT,
+    PARTICIPANT_UPDATED
+} from './actionTypes';
 
 import { sendEvent } from '../../mobile/external-api/functions';
 
@@ -15,28 +19,28 @@ import { sendEvent } from '../../mobile/external-api/functions';
 MiddlewareRegistry.register(store => next => action => {
     switch (action.type) {
     case PARTICIPANT_JOINED: {
+        const { id, avatarURL, name } = action.participant;
 
-        const { id, avatarURL } = action.participant;
-
-        sendEvent(store, 'PARTICIPANT_JOINED', { id, avatarURL });
+        sendEvent(store, 'PARTICIPANT_JOINED', { id,
+            avatarURL,
+            name });
         break;
     }
 
     case PARTICIPANT_LEFT: {
-
-        const { id, avatarURL } = action.participant;
+        const { id } = action.participant;
 
         sendEvent(store, 'PARTICIPANT_LEFT', { id });
 
         break;
-        }
-        case PARTICIPANT_UPDATED: { 
+    }
+    case PARTICIPANT_UPDATED: {
+        const { id, avatarURL, name } = action.participant;
 
-        const { id, avatarURL } = action.participant;
-
-        sendEvent(store, "PARTICIPANT_UPDATED", { id, avatarURL });
-
-        }
+        sendEvent(store, 'PARTICIPANT_UPDATED', { id,
+            avatarURL,
+            name });
+    }
     }
 
     return next(action);

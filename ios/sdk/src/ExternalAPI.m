@@ -1,5 +1,6 @@
 /*
  * Copyright @ 2017-present Atlassian Pty Ltd
+ * Modifications Copyright (C) 2019 Ether Labs LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.

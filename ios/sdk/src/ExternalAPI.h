@@ -3,7 +3,7 @@
 //  sdk
 //
 //  Created by Deep Moradia on 20/08/19.
-//  Copyright © 2019 Jitsi. All rights reserved.
+//  Copyright © 2019 Ether Labs LLC. All rights reserved.
 //
 
 #import <React/RCTBridgeModule.h>

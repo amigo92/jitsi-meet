@@ -1,4 +1,5 @@
 // @flow
+// Modifications Copyright (C) 2019 Ether Labs LLC
 
 import React from 'react';
 import { NativeModules, SafeAreaView, StatusBar, View } from 'react-native';

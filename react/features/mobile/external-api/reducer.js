@@ -1,4 +1,5 @@
 // @flow
+// Modifications Copyright (C) 2019 Ether Labs LLC
 
 import { ReducerRegistry, set } from '../../base/redux';
 

@@ -30,7 +30,7 @@ import CallKit from '../call-integration/CallKit';
 MiddlewareRegistry.register(store => next => action => {
     const result = next(action);
     const { type } = action;
-    const { subscriptions, callKitUrl, callKitName, callUUID } = store.getState()[
+    const { subscriptions, callKitName } = store.getState()[
         'features/mobile/external-api'
     ];
     const state = store.getState();
@@ -59,6 +59,8 @@ MiddlewareRegistry.register(store => next => action => {
                 && conference.callUUID
                 && action.type === CONFERENCE_JOINED
         ) {
+            const { callKitUrl } = store.getState()['features/mobile/external-api'];
+            
             CallKit.updateCall(action.conference.callUUID, {
                 handle: callKitUrl || 'https://meet.etherlabs.io',
                 displayName: callKitName || 'EtherMeet Meeting',
@@ -116,11 +118,15 @@ MiddlewareRegistry.register(store => next => action => {
                         }
                 ),
                 callKitProvider: externalApiEventEmitter().addListener('set-call-kit-provider', () => {
-                    CallKit.updateCall(callUUID, {
-                        handle: callKitUrl || 'https://meet.etherlabs.io',
-                        displayName: callKitName || 'EtherMeet Meeting',
-                        hasVideo: true
-                    });
+                    const { callKitUrl, callUUID } = store.getState()['features/mobile/external-api'];
+
+                    if (callUUID) {
+                        CallKit.updateCall(callUUID, {
+                            handle: callKitUrl || 'https://meet.etherlabs.io',
+                            displayName: callKitName || 'EtherMeet Meeting',
+                            hasVideo: true
+                        });
+                    }
                 })
             };
 

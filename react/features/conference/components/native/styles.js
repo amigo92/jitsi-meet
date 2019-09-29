@@ -1,3 +1,4 @@
+// Modifications Copyright (C) 2019 Ether Labs LLC
 import { BoxModel, ColorPalette, fixAndroidViewClipping } from '../../../base/styles';
 
 import { FILMSTRIP_SIZE } from '../../../filmstrip';

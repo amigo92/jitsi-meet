@@ -1,5 +1,6 @@
 /* eslint-disable no-case-declarations */
 // @flow
+// Modifications Copyright (C) 2019 Ether Labs LLC
 
 import {
     CONFERENCE_FAILED,

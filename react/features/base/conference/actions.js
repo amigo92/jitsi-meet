@@ -23,7 +23,10 @@ import {
     participantUpdated
 } from '../participants';
 import { getLocalTracks, trackAdded, trackRemoved } from '../tracks';
-import { getJitsiMeetGlobalNS } from '../util';
+import {
+    getBackendSafeRoomName,
+    getJitsiMeetGlobalNS
+} from '../util';
 
 import {
     AUTH_STATUS_CHANGED,
@@ -37,6 +40,7 @@ import {
     KICKED_OUT,
     LOCK_STATE_CHANGED,
     P2P_STATUS_CHANGED,
+    SEND_TONES,
     SET_DESKTOP_SHARING_ENABLED,
     SET_FOLLOW_ME,
     SET_MAX_RECEIVER_VIDEO_QUALITY,
@@ -73,6 +77,11 @@ declare var APP: Object;
  * @returns {void}
  */
 function _addConferenceListeners(conference, dispatch) {
+    // A simple logger for conference errors received through
+    // the listener. These errors are not handled now, but logged.
+    conference.on(JitsiConferenceEvents.CONFERENCE_ERROR,
+        error => logger.error('Conference error.', error));
+
     // Dispatches into features/base/conference follow:
 
     conference.on(
@@ -387,8 +396,7 @@ export function createConference() {
         const conference
             = connection.initJitsiConference(
 
-                // XXX Lib-jitsi-meet does not accept uppercase letters.
-                room.toLowerCase(), {
+                getBackendSafeRoomName(room), {
                     ...state['features/base/config'],
                     applicationName: getName(),
                     getWiFiStatsMethod: getJitsiMeetGlobalNS().getWiFiStats,
@@ -517,6 +525,28 @@ export function p2pStatusChanged(p2p: boolean) {
     return {
         type: P2P_STATUS_CHANGED,
         p2p
+    };
+}
+
+/**
+ * Signals to play touch tones.
+ *
+ * @param {string} tones - The tones to play.
+ * @param {number} [duration] - How long to play each tone.
+ * @param {number} [pause] - How long to pause between each tone.
+ * @returns {{
+ *     type: SEND_TONES,
+ *     tones: string,
+ *     duration: number,
+ *     pause: number
+ * }}
+ */
+export function sendTones(tones: string, duration: number, pause: number) {
+    return {
+        type: SEND_TONES,
+        tones,
+        duration,
+        pause
     };
 }
 

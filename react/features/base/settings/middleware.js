@@ -1,10 +1,12 @@
 // @flow
 
+import { APP_WILL_MOUNT } from '../app';
 import { setAudioOnly } from '../audio-only';
 import { getLocalParticipant, participantUpdated } from '../participants';
 import { MiddlewareRegistry } from '../redux';
 
 import { SETTINGS_UPDATED } from './actionTypes';
+import { handleCallIntegrationChange } from './functions';
 
 /**
  * The middleware of the feature base/settings. Distributes changes to the state
@@ -18,13 +20,33 @@ MiddlewareRegistry.register(store => next => action => {
     const result = next(action);
 
     switch (action.type) {
+    case APP_WILL_MOUNT:
+        _initializeCallIntegration(store);
+        break;
     case SETTINGS_UPDATED:
+        _maybeHandleCallIntegrationChange(action);
         _maybeSetAudioOnly(store, action);
         _updateLocalParticipant(store, action);
+        break;
     }
 
     return result;
 });
+
+/**
+ * Initializes the audio device handler based on the `disableCallIntegration` setting.
+ *
+ * @param {Store} store - The redux store.
+ * @private
+ * @returns {void}
+ */
+function _initializeCallIntegration({ getState }) {
+    const { disableCallIntegration } = getState()['features/base/settings'];
+
+    if (typeof disableCallIntegration === 'boolean') {
+        handleCallIntegrationChange(disableCallIntegration);
+    }
+}
 
 /**
  * Maps the settings field names to participant names where they don't match.
@@ -41,6 +63,19 @@ function _mapSettingsFieldToParticipant(settingsField) {
     }
 
     return settingsField;
+}
+
+/**
+ * Handles a change in the `disableCallIntegration` setting.
+ *
+ * @param {Object} action - The redux action.
+ * @private
+ * @returns {void}
+ */
+function _maybeHandleCallIntegrationChange({ settings: { disableCallIntegration } }) {
+    if (typeof disableCallIntegration === 'boolean') {
+        handleCallIntegrationChange(disableCallIntegration);
+    }
 }
 
 /**

@@ -106,6 +106,12 @@ export default {
         paddingHorizontal: 14
     },
 
+    roomTimer: {
+        color: ColorPalette.white,
+        fontSize: 15,
+        opacity: 0.6
+    },
+
     roomName: {
         color: ColorPalette.white,
         fontSize: 17,
@@ -113,8 +119,8 @@ export default {
     },
 
     roomNameWrapper: {
-        flexDirection: 'row',
-        justifyContent: 'center',
+        flexDirection: 'column',
+        alignItems: 'center',
         left: 0,
         paddingHorizontal: 48,
         position: 'absolute',
